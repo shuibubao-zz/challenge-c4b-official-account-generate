@@ -1,0 +1,28 @@
+# .skill 安装验证（解包副本上真跑）—— v2 加固轮重打包后
+
+打包：卢怡然_C4B_wechat-publisher.skill（17 个文件，50,072 字节，zip，SKILL.md 在根，
+sha256 d4bf33cf003aaaf2…）
+v2 轮包内变更：scripts/wechat_check.py（告警对齐官方口径 + 剥离预览外壳防误报）、
+scripts/selftest.py（补外壳场景断言）、references/wechat_restrictions.md（官方出处列 + 删"100 张"）、
+SKILL.md（自检口径注释）
+解包到：C:/Users/Public/c4b_install_test（纯 ASCII 路径，模拟换一台机器）
+
+$ python scripts/selftest.py
+  -> 自检结果：20/20 通过
+
+$ python scripts/convert_to_wechat.py 卢怡然_C4B_文章源文件.md install_test_out.html
+  -> 解析引擎：markdown-lib　主题：accent　格式：wechat
+  -> 合规自检：通过
+  -> 统计：6660 字 / 图 4 张 / h2 15 / 表格 2（与源目录内运行结果一致）
+
+一致性校验：
+  - 包内 17 个文件 vs 源码目录逐文件 sha256 比对：全部一致（无漂移）
+  - 解包副本转换产物 vs 源目录转换产物 sha256：一致（7dc056f09ede1183…）
+
+$ python scripts/wechat_check.py 卢怡然_C4B_output.html（完整文件，含预览外壳）
+  -> 合规自检：✅ 通过（无硬错误）　正文 6660 字 / 图 4 张
+     （v2 修复：预览外壳 <head> 是工具自己生成的浏览器预览页，不是粘贴内容，不再误报 <meta>）
+
+另：官方 skill-creator 打包器（package_skill.py）产物留档在
+evidence/官方打包器输出_wechat-publisher.zip（v1 轮，带 wechat-publisher/ 前缀目录；v2 轮为
+保持 SKILL.md 在根的安装形态，改用等价 zip 打包，两者文件集合一致）。
